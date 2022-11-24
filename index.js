@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const category = require("./data/categories.json");
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.v5n2r.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -33,6 +35,26 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const product = await productsCollection.findOne(query);
       res.send(product);
+    });
+
+    app.get("/categories", async (req, res) => {
+      res.send(category);
+    });
+
+    app.get("/categories/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {};
+      console.log(id);
+      const categoryProduct = await productsCollection.find(query).toArray();
+
+      if (id === "03") {
+        res.send(categoryProduct);
+      } else {
+        const categoryNews = categoryProduct.filter(
+          (n) => n.category_id === id
+        );
+        res.send(categoryNews);
+      }
     });
   } finally {
   }
