@@ -9,8 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const category = require("./data/categories.json");
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.v5n2r.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -22,6 +20,9 @@ async function run() {
   try {
     const productsCollection = client.db("resaleBike").collection("products");
     const usersCollection = client.db("resaleBike").collection("users");
+    const categoriesCollection = client
+      .db("resaleBike")
+      .collection("categories");
 
     // Products
     app.get("/products", async (req, res) => {
@@ -39,11 +40,11 @@ async function run() {
     });
 
     //users
-    // app.get("/users", async (req, res) => {
-    //   const query = {};
-    //   const users = await usersCollection.find(query).toArray();
-    //   res.send(users);
-    // });
+    app.get("/users", async (req, res) => {
+      const query = {};
+      const users = await usersCollection.find(query).toArray();
+      res.send(users);
+    });
 
     //users
     app.post("/users", async (req, res) => {
@@ -54,7 +55,9 @@ async function run() {
     });
 
     app.get("/categories", async (req, res) => {
-      res.send(category);
+      const query = {};
+      const result = await categoriesCollection.find(query).toArray();
+      res.send(result);
     });
 
     app.get("/categories/:id", async (req, res) => {
@@ -62,6 +65,8 @@ async function run() {
       const query = {};
       console.log(id);
       const categoryProduct = await productsCollection.find(query).toArray();
+
+      const result = await categoriesCollection.find(query).toArray();
 
       if (id === "03") {
         res.send(categoryProduct);
