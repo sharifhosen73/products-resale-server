@@ -20,6 +20,7 @@ async function run() {
   try {
     const productsCollection = client.db("resaleBike").collection("products");
     const usersCollection = client.db("resaleBike").collection("users");
+    const commentsCollection = client.db("resaleBike").collection("comments");
     const categoriesCollection = client
       .db("resaleBike")
       .collection("categories");
@@ -51,6 +52,13 @@ async function run() {
       const user = req.body;
       console.log(user);
       const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+
+    // comment
+    app.post("/comment", async (req, res) => {
+      const comment = req.body;
+      const result = await commentsCollection.insertOne(comment);
       res.send(result);
     });
 
