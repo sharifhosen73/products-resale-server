@@ -21,6 +21,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const productsCollection = client.db("resaleBike").collection("products");
+    const usersCollection = client.db("resaleBike").collection("users");
 
     // Products
     app.get("/products", async (req, res) => {
@@ -35,6 +36,21 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const product = await productsCollection.findOne(query);
       res.send(product);
+    });
+
+    //users
+    // app.get("/users", async (req, res) => {
+    //   const query = {};
+    //   const users = await usersCollection.find(query).toArray();
+    //   res.send(users);
+    // });
+
+    //users
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
     });
 
     app.get("/categories", async (req, res) => {
