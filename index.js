@@ -55,6 +55,13 @@ async function run() {
       res.send(result);
     });
 
+    //comment
+    app.get("/comment", async (req, res) => {
+      const query = {};
+      const comment = await commentsCollection.find(query).toArray();
+      res.send(comment);
+    });
+
     // comment
     app.post("/comment", async (req, res) => {
       const comment = req.body;
