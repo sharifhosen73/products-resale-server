@@ -50,6 +50,7 @@ async function run() {
   try {
     const productsCollection = client.db("resaleBike").collection("products");
     const usersCollection = client.db("resaleBike").collection("users");
+    const sellersCollection = client.db("resaleBike").collection("sellers");
     const commentsCollection = client.db("resaleBike").collection("comments");
     const categoriesCollection = client
       .db("resaleBike")
@@ -75,6 +76,25 @@ async function run() {
       const query = {};
       const users = await usersCollection.find(query).toArray();
       res.send(users);
+    });
+
+    // Seller
+    app.post("/users/seller", async (req, res) => {
+      const seller = req.body;
+      const result = await sellersCollection.insertOne(seller);
+      res.send(result);
+    });
+
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params;
+      //   const decodedEmail = req.decoded.email;
+      console.log("sharif", req.params);
+      //   const query = { email: decodedEmail };
+      //   console.log("sharif1", query);
+      // const user = await usersCollection.findOne(query);
+      //   const id = req.params.id;
+      //   const users = await usersCollection.findOne(query);
+      //   res.send(users);
     });
 
     //users
