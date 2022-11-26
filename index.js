@@ -78,6 +78,13 @@ async function run() {
       res.send(users);
     });
 
+    //seller
+    app.get("/users/seller", async (req, res) => {
+      const query = {};
+      const sellers = await sellersCollection.find(query).toArray();
+      res.send(sellers);
+    });
+
     // Seller
     app.post("/users/seller", async (req, res) => {
       const seller = req.body;
