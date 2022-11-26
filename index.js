@@ -92,22 +92,21 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/users/:email", async (req, res) => {
-      const email = req.params;
-      //   const decodedEmail = req.decoded.email;
-      console.log("sharif", req.params);
-      //   const query = { email: decodedEmail };
-      //   console.log("sharif1", query);
-      // const user = await usersCollection.findOne(query);
-      //   const id = req.params.id;
-      //   const users = await usersCollection.findOne(query);
-      //   res.send(users);
-    });
+    // app.get("/users/:email", async (req, res) => {
+    //   //   const email = req.params;
+    //   //   const decodedEmail = req.decoded.email;
+    //   //   console.log("sharif", req.params);
+    //   //   const query = { email: decodedEmail };
+    //   //   console.log("sharif1", query);
+    //   // const user = await usersCollection.findOne(query);
+    //   //   const id = req.params.id;
+    //   //   const users = await usersCollection.findOne(query);
+    //   //   res.send(users);
+    // });
 
     //users
     app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log(user);
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
@@ -160,6 +159,25 @@ async function run() {
         },
       };
       const result = await usersCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      console.log(result);
+      res.send(result);
+    });
+
+    // Seller Create
+    app.put("/users/seller/:id", verifyJWT, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          type: "seller",
+        },
+      };
+      const result = await sellersCollection.updateOne(
         filter,
         updatedDoc,
         options
