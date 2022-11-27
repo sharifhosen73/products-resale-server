@@ -85,24 +85,20 @@ async function run() {
       res.send(sellers);
     });
 
+    //seller
+    app.get("/users/oneseller", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const sellers = await sellersCollection.find(query).toArray();
+      res.send(sellers);
+    });
+
     // Seller
     app.post("/users/seller", async (req, res) => {
       const seller = req.body;
       const result = await sellersCollection.insertOne(seller);
       res.send(result);
     });
-
-    // app.get("/users/:email", async (req, res) => {
-    //   //   const email = req.params;
-    //   //   const decodedEmail = req.decoded.email;
-    //   //   console.log("sharif", req.params);
-    //   //   const query = { email: decodedEmail };
-    //   //   console.log("sharif1", query);
-    //   // const user = await usersCollection.findOne(query);
-    //   //   const id = req.params.id;
-    //   //   const users = await usersCollection.findOne(query);
-    //   //   res.send(users);
-    // });
 
     //users
     app.post("/users", async (req, res) => {
