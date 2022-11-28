@@ -86,11 +86,27 @@ async function run() {
       res.send(product);
     });
 
+    //Product delete
+    app.delete("/products/:id", verifyJWT, verifyAdmin, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await productsCollection.deleteOne(filter);
+      res.send(result);
+    });
+
     //users
     app.get("/users", async (req, res) => {
       const query = {};
       const users = await usersCollection.find(query).toArray();
       res.send(users);
+    });
+
+    // query admin
+    app.get("/users/oneadmin", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const sellers = await usersCollection.findOne(query);
+      res.send(sellers);
     });
 
     //seller
@@ -104,7 +120,7 @@ async function run() {
     app.get("/users/oneseller", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
-      const sellers = await sellersCollection.find(query).toArray();
+      const sellers = await sellersCollection.findOne(query);
       res.send(sellers);
     });
 
